@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Portal | Dashboard</title>
+  <title>TKREC Portal | Dashboard</title>
   
   <!-- Modern Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Styles -->
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="style.css">
   
   <!-- Chart.js for data visualization -->
@@ -55,7 +56,7 @@
       </nav>
       
       <div class="sidebar-footer">
-        <a href="#" class="nav-item text-danger">
+        <a href="#" class="nav-item text-danger" id="logout-btn">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
           <span>Log Out</span>
         </a>
@@ -68,17 +69,20 @@
       <!-- Top Header -->
       <header class="header">
         <div class="header-left">
-          <h1 class="greeting">Good morning, Santosh 👋</h1>
+          <h1 class="greeting">Good morning, Prashanth 👋</h1>
         </div>
         
         <div class="header-right">
-          <button class="icon-btn" aria-label="Notifications">
+          <button class="icon-btn theme-toggle-btn" aria-label="Toggle Theme" style="margin-right: 8px;">
+            <i class="fa-solid fa-desktop text-purple"></i>
+          </button>
+          <button class="icon-btn" aria-label="Notifications" onclick="alert('Notification system active. You have no pending alerts.');">
             <i class="fa-regular fa-bell"></i>
             <span class="notification-badge"></span>
           </button>
           
           <div class="profile-avatar" title="Profile Menu">
-            S
+            P
           </div>
         </div>
       </header>
@@ -92,7 +96,7 @@
             
             <!-- Mobile Greeting (Hidden on Desktop, Order 1 on Mobile) -->
             <div class="col-span-12 mobile-greeting mb-2">
-            <h1 class="greeting">Good morning, Santosh 👋</h1>
+            <h1 class="greeting">Good morning, Prashanth 👋</h1>
             <p class="text-muted mt-1">Here's your dashboard overview for today.</p>
           </div>
 
@@ -641,11 +645,30 @@
           <i class="fa-regular fa-user mb-1"></i>
           <span>Menu</span>
         </a>
+        <a href="#" class="bottom-nav-item text-danger" id="logout-btn-mobile">
+          <i class="fa-solid fa-arrow-right-from-bracket mb-1"></i>
+          <span>Exit</span>
+        </a>
       </div>
     </nav>
-
+    </nav>
   </div>
   
+  <!-- Logout Confirmation Modal -->
+  <div id="logout-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
+    <div class="modal-content card p-8 bg-bg-main" style="max-width: 440px; width: 90%; text-align: center; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-top: 4px solid var(--red);">
+      <div class="w-20 h-20 rounded-full bg-red-light text-red flex items-center justify-center mx-auto mb-5 shadow-sm" style="font-size: 2.5rem;">
+        <i class="fa-solid fa-person-walking-arrow-right"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-main mb-2">Secure Logout</h3>
+      <p class="text-muted mb-8 font-medium text-lg leading-snug">Are you sure you want to end your session, Prashanth?</p>
+      <div class="flex gap-4">
+        <button id="cancel-logout" class="flex-1 bg-bg-hover text-main font-bold py-3 rounded-md hover-lift outline-none border border-light cursor-pointer text-lg" style="border: 1px solid var(--border-focus);">Cancel</button>
+        <button id="confirm-logout" class="flex-1 bg-red text-white font-bold py-3 rounded-md hover-lift outline-none border-none cursor-pointer text-lg shadow-md" style="border: none;">Log Out</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
