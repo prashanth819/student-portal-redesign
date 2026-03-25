@@ -235,6 +235,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  // --- LOGOUT MODAL & DUMMY LINKS SYNCHRONIZATION ---
+  const logoutBtnDesktop = document.getElementById('logout-btn');
+  const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+  const logoutModal = document.getElementById('logout-modal');
+  const confirmLogout = document.getElementById('confirm-logout');
+  const cancelLogout = document.getElementById('cancel-logout');
+  
+  function showLogoutModal(e) {
+    if(e) e.preventDefault();
+    if(logoutModal) {
+      logoutModal.style.display = 'flex';
+      void logoutModal.offsetWidth; // Reflow
+      logoutModal.style.opacity = '1';
+      logoutModal.querySelector('.modal-content').style.transform = 'scale(1)';
+    }
+  }
+  
+  function hideLogoutModal() {
+    if(logoutModal) {
+      logoutModal.style.opacity = '0';
+      logoutModal.querySelector('.modal-content').style.transform = 'scale(0.9)';
+      setTimeout(() => logoutModal.style.display = 'none', 300);
+    }
+  }
+  
+  if (logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', showLogoutModal);
+  if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', showLogoutModal);
+  if (cancelLogout) cancelLogout.addEventListener('click', hideLogoutModal);
+  
+  if (confirmLogout) {
+    confirmLogout.addEventListener('click', () => {
+      confirmLogout.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Exiting...';
+      confirmLogout.style.opacity = '0.8';
+      confirmLogout.style.cursor = 'not-allowed';
+      
+      setTimeout(() => { window.location.href = 'login.html'; }, 1000);
+    });
+  }
+
+  // Set default action for all '#` anchor links not otherwise tracked
+  document.querySelectorAll('a[href="#"]:not(.nav-item):not(.bottom-nav-item)').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('TKREC Dashboard: External feature integration confirmed (dummy verification link).');
+    });
+  });
+
   // Initialize schedule tracking
   updateSchedule();
   
