@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal | Dashboard</title>
+  
+  <!-- Modern Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <span>EduPortal</span>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-house"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="attendance">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Attendance</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="performance">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Performance</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="schedule">
+          <i class="fa-solid fa-clock"></i>
+          <span>Schedule</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item text-danger">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <!-- Top Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="greeting">Good morning, Santosh 👋</h1>
+        </div>
+        
+        <div class="header-right">
+          <button class="icon-btn" aria-label="Notifications">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notification-badge"></span>
+          </button>
+          
+          <div class="profile-avatar" title="Profile Menu">
+            S
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area Container -->
+      <main class="content-container">
+      
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard-tab" class="tab-content active" style="display: block;">
+          <div class="grid-12">
+            
+            <!-- Mobile Greeting (Hidden on Desktop, Order 1 on Mobile) -->
+            <div class="col-span-12 mobile-greeting mb-2">
+            <h1 class="greeting">Good morning, Santosh 👋</h1>
+            <p class="text-muted mt-1">Here's your dashboard overview for today.</p>
+          </div>
+
+          <!-- Row 1 -->
+          <!-- Left (8 cols): Today's Schedule -->
+          <div class="col-span-8 card schedule-card flex flex-col" style="padding: 24px;">
+            <div class="card-header border-b pb-3 mb-4 flex justify-between items-center" style="align-items: center;">
+              <div>
+                <h2 class="text-2xl font-bold text-main" style="letter-spacing: -0.01em; display: flex; align-items: center;">
+                  <i class="fa-regular fa-calendar-check text-green opacity-80 mr-2"></i> Today's Schedule
+                </h2>
+                <p id="schedule-subtitle" class="text-sm font-medium mt-1 text-muted">Loading schedule...</p>
+              </div>
+              <div class="text-right">
+                <div id="live-time" class="text-xl font-bold text-main font-mono">--:-- --</div>
+                <div id="schedule-now-badge" class="badge bg-border-light text-muted mt-1" style="display: none;">Pending</div>
+              </div>
+            </div>
+            
+            <div class="timeline-container" style="flex: 1;">
+              <ul class="timeline" id="schedule-timeline">
+                <!-- Javascript will inject the schedule content here -->
+                <div class="p-4 text-center text-muted">Loading schedule data...</div>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Right (4 cols): Attendance Overview -->
+          <div class="col-span-4 card attendance-card flex flex-col" style="padding: 24px;">
+            <div class="card-header border-b pb-3 mb-4">
+              <h2 class="text-xl font-bold text-main" style="letter-spacing: -0.01em;">
+                <i class="fa-solid fa-clipboard-user text-blue opacity-80 mr-2"></i> Attendance
+              </h2>
+            </div>
+            
+            <div class="attendance-content flex-1 flex flex-col">
+              <!-- Top: Circular Progress & Overall -->
+              <div class="flex flex-col items-center justify-center mb-6 relative">
+                <div class="circular-progress-container mb-2 relative flex items-center justify-center">
+                  <svg class="progress-ring" width="140" height="140">
+                    <circle class="progress-ring-bg" stroke="var(--border-light)" stroke-width="12" fill="transparent" r="58" cx="70" cy="70"/>
+                    <circle id="overall-attendance-ring" class="progress-ring-circle" stroke="var(--blue)" stroke-width="12" fill="transparent" r="58" cx="70" cy="70" stroke-dasharray="364.42" stroke-dashoffset="364.42" stroke-linecap="round"/>
+                  </svg>
+                  <div class="absolute w-full h-full flex flex-col items-center justify-center" style="top: 0; left: 0;">
+                    <span id="overall-attendance-text" class="text-4xl font-bold text-main" style="letter-spacing: -0.02em;">--</span>
+                    <span class="text-xs text-muted font-semibold uppercase tracking-wide mt-1">Overall</span>
+                  </div>
+                </div>
+                
+                <!-- Insight Message -->
+                <div id="attendance-insight" class="w-full text-center mt-2" style="min-height: 28px;">
+                  <span class="badge bg-border-light text-muted text-sm px-3 py-1 mx-auto block" style="width: fit-content;">Loading insights...</span>
+                </div>
+              </div>
+              
+              <!-- Bottom: Subject List -->
+              <div class="subject-attendance-list mt-auto flex flex-col gap-4" id="subject-attendance-list">
+                <div class="p-4 text-center text-muted text-sm">Loading attendance data...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <!-- Left (6 cols): Performance (GPA) -->
+          <div class="col-span-6 card performance-card flex flex-col" style="padding: 24px;">
+            <div class="card-header border-b pb-3 mb-4 flex justify-between items-center">
+              <h2 class="text-xl font-bold text-main" style="letter-spacing: -0.01em;">
+                <i class="fa-solid fa-chart-line text-purple opacity-80 mr-2"></i> Performance
+              </h2>
+              <span class="badge badge-purple">Sem 4</span>
+            </div>
+            
+            <div class="flex-1 flex flex-col">
+              <!-- Top Section: GPA & Trend -->
+              <div class="flex items-end justify-between mb-4">
+                <div>
+                  <div class="text-sm font-semibold text-muted uppercase tracking-wide mb-1">Current CGPA</div>
+                  <h3 class="stat-value text-main font-bold" style="font-size: 3rem; line-height: 1;">8.5</h3>
+                </div>
+                <div class="text-right pb-1">
+                  <span class="badge badge-green text-sm flex items-center font-bold px-3 py-1">
+                    <i class="fa-solid fa-arrow-trend-up mr-1"></i> +5% improvement
+                  </span>
+                </div>
+              </div>
+              
+              <!-- Main Section: Chart -->
+              <div class="chart-wrapper mb-6 w-full relative" style="height: 180px;">
+                <canvas id="performanceChart"></canvas>
+              </div>
+              
+              <!-- Below Chart: Insights & Mini Cards -->
+              <div class="mt-auto">
+                <div class="flex gap-4 mb-5">
+                  <div class="flex-1 bg-bg-main rounded-md p-3 flex items-center gap-3">
+                    <div class="bg-green-light text-green w-8 h-8 rounded-full flex items-center justify-center shrink-0">
+                      <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-muted font-bold uppercase tracking-wide">Best Subject</div>
+                      <div class="text-sm font-semibold text-main">Mathematics (92%)</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 bg-bg-main rounded-md p-3 flex items-center gap-3">
+                    <div class="bg-orange-light text-orange w-8 h-8 rounded-full flex items-center justify-center shrink-0">
+                      <i class="fa-solid fa-book-open-reader"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-muted font-bold uppercase tracking-wide">Needs Focus</div>
+                      <div class="text-sm font-semibold text-main">DBMS (72%)</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 3 Subject Progress Cards Mini -->
+                <div class="flex flex-col gap-3">
+                  <h4 class="text-xs font-bold text-muted uppercase tracking-wide border-b pb-2">Recent Scores</h4>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-main w-1/3">Algorithms</span>
+                    <div class="w-1/3 progress-bar-bg h-2 mx-2"><div class="progress-bar-fill bg-green" style="width: 88%;"></div></div>
+                    <span class="text-sm font-bold text-green w-12 text-right">88%</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-main w-1/3">Operating Sys</span>
+                    <div class="w-1/3 progress-bar-bg h-2 mx-2"><div class="progress-bar-fill bg-blue" style="width: 82%;"></div></div>
+                    <span class="text-sm font-bold text-blue w-12 text-right">82%</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-main w-1/3">DBMS</span>
+                    <div class="w-1/3 progress-bar-bg h-2 mx-2"><div class="progress-bar-fill bg-orange" style="width: 72%;"></div></div>
+                    <span class="text-sm font-bold text-orange w-12 text-right">72%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right (6 cols): Alerts & Insights -->
+          <div class="col-span-6 card alerts-card flex flex-col" style="padding: 24px;">
+            <div class="card-header border-b pb-3 mb-4">
+              <h2 class="text-xl font-bold text-main" style="letter-spacing: -0.01em;">
+                <i class="fa-regular fa-lightbulb text-orange opacity-90 mr-2"></i> Insights
+              </h2>
+            </div>
+            
+            <div class="flex-1 flex flex-col gap-3">
+              <!-- Insight 1: Urgent (Red) -->
+              <div class="p-3 bg-red-light rounded-md flex items-start gap-3 hover-lift animate-slide-up delay-100 cursor-default" style="border: 1px solid rgba(239, 68, 68, 0.2);">
+                <div class="bg-red text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-red text-sm">Action Required</p>
+                  <p class="text-sm font-medium text-main opacity-90 mt-0.5 leading-snug">Attendance below 75% in DBMS.</p>
+                </div>
+              </div>
+              
+              <!-- Insight 2: Warning (Orange) -->
+              <div class="p-3 bg-orange-light rounded-md flex items-start gap-3 hover-lift animate-slide-up delay-200 cursor-default" style="border: 1px solid rgba(245, 158, 11, 0.2);">
+                <div class="bg-orange text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-regular fa-calendar text-sm"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-orange text-sm">Upcoming Deadline</p>
+                  <p class="text-sm font-medium text-main opacity-90 mt-0.5 leading-snug">Networks assignment due tomorrow.</p>
+                </div>
+              </div>
+              
+              <!-- Insight 3: Positive (Green) -->
+              <div class="p-3 bg-green-light rounded-md flex items-start gap-3 hover-lift animate-slide-up delay-300 cursor-default" style="border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div class="bg-green text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-arrow-trend-up text-sm"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-green text-sm">Great Progress</p>
+                  <p class="text-sm font-medium text-main opacity-90 mt-0.5 leading-snug">Performance improved by 5% this semester.</p>
+                </div>
+              </div>
+
+              <!-- Insight 4: Positive (Green) -->
+              <div class="p-3 bg-green-light rounded-md flex items-start gap-3 hover-lift animate-slide-up delay-400 cursor-default" style="border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div class="bg-green text-white w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-check text-sm"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-green text-sm">On Track</p>
+                  <p class="text-sm font-medium text-main opacity-90 mt-0.5 leading-snug">Good attendance in Maths!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <!-- Full width (12 cols): Quick Stats horizontal cards -->
+          <div class="col-span-12 grid grid-cols-4 gap-4 quick-stats-card pt-2">
+            
+            <!-- Stat 1: Overall Attendance -->
+            <div class="card bg-bg-main hover-lift flex flex-col justify-between" style="padding: 20px; border-top: 4px solid var(--primary);">
+              <div class="mb-3">
+                <div class="text-green bg-green-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                  <i class="fa-solid fa-clipboard-user text-lg"></i>
+                </div>
+                <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Overall Attendance</p>
+              </div>
+              <div>
+                <h3 class="stat-value text-3xl text-main font-bold">92%</h3>
+                <p class="text-xs font-semibold text-green mt-1 flex items-center"><i class="fa-solid fa-check-circle mr-1"></i> Above requirement</p>
+              </div>
+            </div>
+
+            <!-- Stat 2: GPA -->
+            <div class="card bg-bg-main hover-lift flex flex-col justify-between" style="padding: 20px; border-top: 4px solid var(--purple);">
+              <div class="mb-3">
+                <div class="text-purple bg-purple-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                  <i class="fa-solid fa-chart-line text-lg"></i>
+                </div>
+                <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Average GPA</p>
+              </div>
+              <div>
+                <h3 class="stat-value text-3xl text-main font-bold">8.5</h3>
+                <p class="text-xs font-semibold text-purple mt-1 flex items-center"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Top 10% Class</p>
+              </div>
+            </div>
+
+            <!-- Stat 3: Classes Attended / Total -->
+            <div class="card bg-bg-main hover-lift flex flex-col justify-between" style="padding: 20px; border-top: 4px solid var(--blue);">
+              <div class="mb-3">
+                <div class="text-blue bg-blue-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                  <i class="fa-solid fa-user-check text-lg"></i>
+                </div>
+                <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Classes Attended</p>
+              </div>
+              <div>
+                <h3 class="stat-value text-3xl text-main font-bold">92 <span class="text-lg text-muted font-semibold ml-1">/ 119</span></h3>
+                <p class="text-xs font-semibold text-blue mt-1 flex items-center"><i class="fa-solid fa-thumbs-up mr-1"></i> Consistent record</p>
+              </div>
+            </div>
+
+            <!-- Stat 4: Upcoming Classes Today -->
+            <div class="card bg-bg-main hover-lift flex flex-col justify-between" style="padding: 20px; border-top: 4px solid var(--orange);">
+              <div class="mb-3">
+                <div class="text-orange bg-orange-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                  <i class="fa-regular fa-clock text-lg"></i>
+                </div>
+                <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Upcoming Today</p>
+              </div>
+              <div>
+                <h3 class="stat-value text-3xl text-main font-bold">3</h3>
+                <p class="text-xs font-semibold text-orange mt-1 flex items-center"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Next at 11:30 AM</p>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+        </div>
+        <!-- END DASHBOARD TAB -->
+
+        <!-- ATTENDANCE TAB -->
+        <div id="attendance-tab" class="tab-content" style="display: none;">
+          
+          <div class="mb-6 mt-2">
+            <h2 class="text-3xl font-bold text-main" style="letter-spacing: -0.02em;">Attendance</h2>
+            <p class="text-muted font-medium mt-1">Track your subject-wise attendance</p>
+          </div>
+
+          <!-- Summary Section (Top Card) -->
+          <div class="card flex md-flex-row flex-col items-center justify-between hover-lift bg-bg-main" style="padding: 24px; margin-bottom: 24px;">
+            <div class="flex flex-col md-flex-row items-center gap-6 flex-1 w-full">
+              <!-- Circular Progress -->
+              <div class="circular-progress-container relative flex items-center justify-center shrink-0">
+                <svg class="progress-ring" width="160" height="160" style="transform: rotate(-90deg);">
+                  <circle stroke="var(--border-light)" stroke-width="14" fill="transparent" r="66" cx="80" cy="80"/>
+                  <circle id="page-overall-attendance-ring" stroke="var(--blue)" stroke-width="14" fill="transparent" r="66" cx="80" cy="80" stroke-dasharray="414.7" stroke-dashoffset="414.7" stroke-linecap="round" style="transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease;"/>
+                </svg>
+                <div class="absolute w-full h-full flex flex-col items-center justify-center top-0 left-0">
+                  <span id="page-overall-attendance-text" class="text-5xl font-bold text-main" style="letter-spacing: -0.02em; line-height: 1;">--</span>
+                  <span class="text-xs text-muted font-bold uppercase tracking-wide mt-2">Overall</span>
+                </div>
+              </div>
+              
+              <div class="flex-1 w-full text-center md-text-left">
+                <h3 class="text-2xl font-bold text-main mb-3">Overall Standing</h3>
+                <!-- Insight Message -->
+                <div id="page-attendance-insight" style="min-height: 36px;">
+                  <span class="badge bg-border-light text-muted text-sm px-3 py-1" style="display: inline-block;">Loading insights...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Section: Subject Breakdown -->
+          <div>
+            <h3 class="text-xl font-bold text-main mb-4"><i class="fa-solid fa-layer-group text-blue mr-2 opacity-80"></i> Subject Breakdown</h3>
+            <div class="grid md-grid-cols-2 gap-4" id="page-subject-grid" style="grid-template-columns: 1fr;">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+          
+        </div>
+        <!-- END ATTENDANCE TAB -->
+
+        <!-- PERFORMANCE TAB -->
+        <div id="performance-tab" class="tab-content" style="display: none;">
+          
+          <div class="mb-6 mt-2">
+            <h2 class="text-3xl font-bold text-main" style="letter-spacing: -0.02em;">Performance</h2>
+            <p class="text-muted font-medium mt-1">Analyze your academic progress</p>
+          </div>
+
+          <!-- Summary Cards (Top Row) -->
+          <div class="grid md-grid-cols-3 gap-4 mb-6">
+            <div class="card p-5 bg-bg-main hover-lift" style="border-top: 4px solid var(--purple);">
+              <div class="text-purple bg-purple-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+              </div>
+              <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Average CGPA</p>
+              <h3 class="stat-value text-4xl text-main font-bold mt-1" style="line-height: 1;">8.5</h3>
+            </div>
+            
+            <div class="card p-5 bg-bg-main hover-lift" style="border-top: 4px solid var(--primary);">
+              <div class="text-green bg-green-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                <i class="fa-solid fa-trophy text-lg"></i>
+              </div>
+              <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Best Subject</p>
+              <h3 class="stat-value text-xl text-main font-bold mt-2" style="line-height: 1.2;">Mathematics <br><span class="text-green text-sm flex items-center mt-1"><i class="fa-solid fa-arrow-trend-up mr-1 text-xs"></i> 92%</span></h3>
+            </div>
+            
+            <div class="card p-5 bg-bg-main hover-lift" style="border-top: 4px solid var(--orange);">
+              <div class="text-orange bg-orange-light w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                <i class="fa-solid fa-book-open-reader text-lg"></i>
+              </div>
+              <p class="text-muted text-sm font-bold uppercase tracking-wide leading-snug">Needs Focus</p>
+              <h3 class="stat-value text-xl text-main font-bold mt-2" style="line-height: 1.2;">DBMS <br><span class="text-orange text-sm flex items-center mt-1"><i class="fa-solid fa-arrow-trend-down mr-1 text-xs"></i> 72%</span></h3>
+            </div>
+          </div>
+
+          <!-- Main Section Chart -->
+          <div class="card p-6 mb-6 hover-lift bg-bg-main">
+            <div class="flex justify-between items-center border-b pb-4 mb-4 mt-2">
+              <h3 class="text-xl font-bold text-main"><i class="fa-solid fa-chart-area text-purple mr-2 opacity-80"></i> Performance Trend</h3>
+              <span class="badge badge-purple px-3 py-1 font-bold tracking-wide uppercase text-[10px]">All Semesters</span>
+            </div>
+            <div class="w-full relative" style="height: 320px;">
+              <canvas id="pagePerformanceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Subjects and Insights Grid -->
+          <div class="grid md-grid-cols-12 gap-6 mb-6">
+            
+            <!-- Subject Breakdown (8 cols on desktop) -->
+            <div class="md-col-span-8">
+              <h3 class="text-xl font-bold text-main mb-4"><i class="fa-solid fa-book text-blue mr-2 opacity-80"></i> Subject Breakdown</h3>
+              <div class="grid sm-grid-cols-2 gap-4" id="performance-subject-grid" style="grid-template-columns: 1fr;">
+                <!-- Subject cards injected by JS -->
+              </div>
+            </div>
+            
+            <!-- Insights Section (4 cols on desktop) -->
+            <div class="md-col-span-4">
+              <h3 class="text-xl font-bold text-main mb-4"><i class="fa-regular fa-lightbulb text-orange mr-2 opacity-80"></i> Smart Insights</h3>
+              <div class="flex flex-col gap-3" id="performance-insights-list">
+                <!-- Smart Insights injected by JS -->
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+        <!-- END PERFORMANCE TAB -->
+
+        <!-- SCHEDULE TAB -->
+        <div id="schedule-tab" class="tab-content" style="display: none;">
+          
+          <div class="mb-6 mt-2">
+            <h2 class="text-3xl font-bold text-main" style="letter-spacing: -0.02em;">Schedule</h2>
+            <p class="text-muted font-medium mt-1">Your daily class timeline</p>
+          </div>
+
+          <!-- Day Selector -->
+          <div class="day-selector-container overflow-x-auto pb-4 mb-6" style="scrollbar-width: none;">
+            <div class="flex gap-3" id="schedule-day-tabs" style="min-width: max-content;">
+              <!-- Tabs injected via JS -->
+            </div>
+          </div>
+
+          <!-- Extra UX Header Insight -->
+          <div class="card p-4 bg-bg-main hover-lift flex justify-between items-center mb-6" style="border-left: 4px solid var(--primary);">
+            <div>
+              <h3 class="font-bold text-main" id="schedule-page-status" style="font-size: 1.05rem;">Checking schedule...</h3>
+              <p class="text-sm font-semibold text-muted mt-1" id="schedule-page-substatus">Calculating next class...</p>
+            </div>
+            <div class="text-2xl text-primary opacity-80 shrink-0 ml-4">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+          </div>
+
+          <!-- Main Timeline Section -->
+          <div class="card p-6 bg-bg-main relative" style="min-height: 400px;">
+            <div class="timeline relative" id="page-schedule-timeline">
+              <!-- Timeline classes injected via JS -->
+            </div>
+          </div>
+          
+        </div>
+        <!-- END SCHEDULE TAB -->
+
+        <!-- PROFILE TAB -->
+        <div id="profile-tab" class="tab-content" style="display: none;">
+          
+          <div class="mb-6 mt-2">
+            <h2 class="text-3xl font-bold text-main" style="letter-spacing: -0.02em;">Profile</h2>
+            <p class="text-muted font-medium mt-1">Student information and mentorship</p>
+          </div>
+
+          <!-- Top Profile Card -->
+          <div class="card p-6 bg-bg-main hover-lift mb-6 flex flex-col md-flex-row items-center gap-6" style="border-top: 4px solid var(--primary);">
+            <div class="shrink-0 relative">
+              <div class="w-24 h-24 rounded-full bg-primary-light flex items-center justify-center text-primary border-4 border-white shadow-md relative" style="font-size: 2.5rem; z-index: 2;">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+              <span class="absolute bottom-1 right-1 w-5 h-5 bg-green rounded-full border-2 border-white" style="z-index: 3;" title="Active"></span>
+            </div>
+            
+            <div class="flex-1 text-center md-text-left">
+              <h3 class="text-3xl font-bold text-main" style="letter-spacing: -0.01em;">Santosh Kumar</h3>
+              <p class="text-muted font-medium mt-1 text-lg mb-3">Computer Science & Engineering</p>
+              <div class="flex flex-wrap items-center justify-center md-justify-start gap-3">
+                <span class="badge badge-blue px-3 py-1 font-bold tracking-wide"><i class="fa-solid fa-id-card mr-1"></i> 24CS1045</span>
+                <span class="badge badge-purple px-3 py-1 font-bold tracking-wide"><i class="fa-solid fa-graduation-cap mr-1"></i> Semester 4</span>
+              </div>
+            </div>
+            
+            <div class="flex gap-6 shrink-0 mt-4 md-mt-0 items-center">
+              <div class="text-center">
+                <p class="text-xs font-bold text-muted uppercase tracking-wide">CGPA</p>
+                <p class="text-2xl font-bold text-main mt-1 line-height-1">8.5</p>
+              </div>
+              <div class="w-px bg-border-light hidden md-block" style="height: 40px; width: 1px;"></div>
+              <div class="text-center">
+                <p class="text-xs font-bold text-muted uppercase tracking-wide">Attendance</p>
+                <p class="text-2xl font-bold text-green mt-1 line-height-1">92%</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid md-grid-cols-2 gap-6 mb-6">
+            
+            <!-- Personal & Academic Info -->
+            <div class="card p-6 bg-bg-main hover-lift">
+              <h3 class="text-xl font-bold text-main mb-6 border-b pb-3"><i class="fa-solid fa-address-card text-blue mr-2 opacity-80"></i> Personal Details</h3>
+              
+              <div class="flex flex-col gap-5">
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-full bg-blue-light text-blue flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-envelope text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-muted uppercase tracking-wide">University Email</p>
+                    <p class="text-sm font-bold text-main mt-0.5">santosh.k24@university.edu</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-full bg-orange-light text-orange flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-phone text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-muted uppercase tracking-wide">Contact Number</p>
+                    <p class="text-sm font-bold text-main mt-0.5">+91 98765 43210</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-full bg-purple-light text-purple flex items-center justify-center shrink-0">
+                    <i class="fa-regular fa-calendar-check text-sm"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-muted uppercase tracking-wide">Enrollment Validity</p>
+                    <p class="text-sm font-bold text-main mt-0.5">August 2024 - May 2028</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mentor Section -->
+            <div class="card p-6 bg-bg-main hover-lift flex flex-col">
+              <h3 class="text-xl font-bold text-main mb-6 border-b pb-3"><i class="fa-solid fa-user-tie text-orange mr-2 opacity-80"></i> Academic Mentor</h3>
+              
+              <div class="flex flex-col gap-5 flex-1">
+                <div class="flex items-center gap-4">
+                  <div class="w-16 h-16 rounded-full bg-orange-light text-orange flex items-center justify-center border-2 shrink-0 shadow-sm" style="font-size: 1.75rem; border-color: rgba(245, 158, 11, 0.3);">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-lg font-bold text-main">Dr. Rajesh Patel</h4>
+                    <p class="text-xs font-bold text-muted uppercase tracking-wide mt-1"><i class="fa-solid fa-briefcase text-orange opacity-80 mr-1"></i> Senior Professor</p>
+                  </div>
+                </div>
+                
+                <div class="bg-bg-light p-4 rounded-md" style="border: 1px solid var(--border-light);">
+                  <p class="text-sm font-medium text-main leading-snug"><i class="fa-solid fa-quote-left text-muted opacity-40 mr-1"></i> Available for academic guidance, elective selection, and career counseling on weekdays between 3 PM to 5 PM.</p>
+                </div>
+                
+                <div class="flex gap-3 mt-auto pt-2">
+                  <button class="flex-1 bg-primary text-white font-bold py-2.5 rounded-md hover-lift transition-all outline-none flex items-center justify-center gap-2" style="border: none; cursor: pointer;">
+                    <i class="fa-solid fa-envelope"></i> Email
+                  </button>
+                  <button class="flex-1 bg-bg-main border text-main font-bold py-2.5 rounded-md hover-lift transition-all outline-none flex items-center justify-center gap-2" style="border: 1px solid var(--border-light); cursor: pointer;">
+                    <i class="fa-solid fa-phone"></i> Call
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+        <!-- END PROFILE TAB -->
+
+      </main>
+      
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-list">
+        <a href="#" class="bottom-nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-house mb-1"></i>
+          <span>Home</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-tab="attendance">
+          <i class="fa-solid fa-calendar-check mb-1"></i>
+          <span>Attend</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-tab="performance">
+          <i class="fa-solid fa-chart-line mb-1"></i>
+          <span>Perf</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-tab="schedule">
+          <i class="fa-solid fa-clock mb-1"></i>
+          <span>Sched</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-tab="profile">
+          <i class="fa-regular fa-user mb-1"></i>
+          <span>Menu</span>
+        </a>
+      </div>
+    </nav>
+
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
